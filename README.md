@@ -4,8 +4,6 @@
 
 <br/>
 
-# CampusGPT
-
 <p><em>Your all-in-one AI companion for academic and career success.</em></p>
 
 [![Live App](https://img.shields.io/badge/🚀%20Live%20App-campus--gpt.streamlit.app-B8D651?style=for-the-badge&logo=streamlit&logoColor=white)](https://campus-gpt.streamlit.app/)
@@ -41,7 +39,7 @@ CampusGPT is an AI-powered student success platform built with **Streamlit** and
 
 ## Architecture
 
-![CampusGPT System Architecture](https://code.swecha.org/Sohansourab27/campusgpt/-/raw/main/CampusGpt.png)
+![CampusGPT System Architecture](https://github.com/sohansourab/campusGPT-replit/blob/main/arch.png?raw=true)
 
 > **Backend flow (common to all modules):**
 > `Streamlit UI` → `app.py` → `utils/` (pdf_utils + groq_helper) → `Groq API (LLaMA 3.1)` **or** `Ollama (Local)` → `AI Response` → `UI Output`
