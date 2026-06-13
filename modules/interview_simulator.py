@@ -5,6 +5,7 @@ Interview Simulator — generate questions and evaluate answers.
 
 import streamlit as st
 from utils import ask_llm
+from i18n.translations import t
 
 ROLES = [
     "Software Engineer",
@@ -16,8 +17,6 @@ ROLES = [
 
 
 def generate_questions(role: str) -> str:
-    if not role:
-        return "⚠️ Please select a role."
     prompt = (
         f"Generate 10 realistic, role-specific interview questions for a {role} position. "
         "Number each question and include a mix of technical, behavioural, and situational questions."
@@ -26,8 +25,6 @@ def generate_questions(role: str) -> str:
 
 
 def evaluate_answer(role: str, answer: str) -> str:
-    if not answer.strip():
-        return "⚠️ Please enter your answer before evaluating."
     prompt = f"""Evaluate the following interview answer for a {role} position.
 
 Answer:
@@ -43,25 +40,28 @@ Provide:
 
 
 def render() -> None:
-    st.markdown("## 🎤 Interview Simulator\nPractice role-specific interviews and get AI feedback on your answers.")
+    st.markdown(t("interview_title"))
 
-    role = st.selectbox("Select Role", ROLES, index=0)
+    role = st.selectbox(t("interview_role_label"), ROLES, index=0)
 
-    if st.button("Generate Questions", type="primary"):
-        with st.spinner("Generating questions…"):
+    if st.button(t("interview_gen_btn"), type="primary"):
+        with st.spinner(t("interview_gen_spinner")):
             questions = generate_questions(role)
         st.markdown(questions)
 
     st.markdown("---")
-    st.markdown("### ✍️ Answer Evaluation")
+    st.markdown(t("interview_eval_heading"))
 
     answer = st.text_area(
-        "Your Answer",
-        placeholder="Type your answer to one of the questions above…",
+        t("interview_answer_label"),
+        placeholder=t("interview_answer_placeholder"),
         height=150,
     )
 
-    if st.button("Evaluate Answer"):
-        with st.spinner("Evaluating…"):
-            feedback = evaluate_answer(role, answer)
-        st.markdown(feedback)
+    if st.button(t("interview_eval_btn")):
+        if not answer.strip():
+            st.warning("⚠️")
+        else:
+            with st.spinner(t("interview_eval_spinner")):
+                feedback = evaluate_answer(role, answer)
+            st.markdown(feedback)

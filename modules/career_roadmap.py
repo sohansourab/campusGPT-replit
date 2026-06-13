@@ -5,6 +5,7 @@ Career Roadmap — personalized learning & career plan.
 
 import streamlit as st
 from utils import ask_llm
+from i18n.translations import t
 
 
 def _build_prompt(goal: str) -> str:
@@ -20,24 +21,18 @@ Structure the roadmap as follows:
 """
 
 
-def generate_roadmap(goal: str) -> str:
-    if not goal.strip():
-        return "⚠️ Please enter a career goal."
-    return ask_llm(_build_prompt(goal))
-
-
 def render() -> None:
-    st.markdown("## 🛣️ Career Roadmap Generator\nGet a personalized, step-by-step plan to reach your career goal.")
+    st.markdown(t("roadmap_title"))
 
     goal = st.text_input(
-        "Career Goal",
-        placeholder="e.g. Machine Learning Engineer, Full Stack Developer, Data Scientist…",
+        t("roadmap_goal_label"),
+        placeholder=t("roadmap_goal_placeholder"),
     )
 
-    if st.button("Generate Roadmap", type="primary"):
+    if st.button(t("roadmap_gen_btn"), type="primary"):
         if not goal.strip():
-            st.warning("⚠️ Please enter a career goal.")
+            st.warning(t("roadmap_warn_no_goal"))
         else:
-            with st.spinner("Building your roadmap…"):
-                roadmap = generate_roadmap(goal)
+            with st.spinner(t("roadmap_spinner")):
+                roadmap = ask_llm(_build_prompt(goal))
             st.markdown(roadmap)

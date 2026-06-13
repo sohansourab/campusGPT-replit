@@ -1,10 +1,11 @@
 """
 modules/pdf_assistant.py
-PDF Assistant — chat with any PDF using LLaMA via Groq.
+PDF Assistant — chat with any PDF using LLaMA via Groq or Ollama.
 """
 
 import streamlit as st
 from utils import ask_llm, extract_text_from_pdf
+from i18n.translations import t
 
 
 def _build_prompt(text: str, question: str) -> str:
@@ -19,21 +20,21 @@ Question:
 
 
 def render() -> None:
-    st.markdown("## 📄 PDF Assistant\nUpload any PDF and ask questions about its content.")
+    st.markdown(t("pdf_title"))
 
-    pdf_file = st.file_uploader("Upload PDF", type=["pdf"])
-    question = st.text_area("Your Question", placeholder="What is the main topic of this document?")
+    pdf_file = st.file_uploader(t("pdf_upload_label"), type=["pdf"])
+    question = st.text_area(t("pdf_question_label"), placeholder=t("pdf_question_placeholder"))
 
-    if st.button("Ask", type="primary"):
+    if st.button(t("pdf_ask_btn"), type="primary"):
         if pdf_file is None:
-            st.warning("⚠️ Please upload a PDF first.")
+            st.warning(t("pdf_warn_no_file"))
         elif not question.strip():
-            st.warning("⚠️ Please enter a question.")
+            st.warning(t("pdf_warn_no_question"))
         else:
             text = extract_text_from_pdf(pdf_file)
             if not text.strip():
-                st.warning("⚠️ Could not extract text from this PDF.")
+                st.warning(t("pdf_warn_no_text"))
             else:
-                with st.spinner("Thinking…"):
+                with st.spinner(t("pdf_spinner")):
                     answer = ask_llm(_build_prompt(text, question))
                 st.markdown(answer)
